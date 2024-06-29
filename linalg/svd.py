@@ -26,10 +26,12 @@ def svd(A):
     return (U, S, V)
 
 # Test code
-A = np.random.randn(10,2)
+A = np.array([[87,24], [2,32], [80,14], [98,74], [94,59], [37,65], [3,6], [11,56], [15,30], [26,33]])
+
 U, S, V = svd(A)
 A_reconstructed = U@S@V.transpose()
-A_abs_rounded = np.abs(np.round(A, 2))
-A_reconstructed_abs_rounded = np.abs(np.round(A_reconstructed, 2))
-assert(np.all(A_abs_rounded == A_reconstructed_abs_rounded))
+A_reconstructed_rounded = np.round(A_reconstructed, 2)
+
+assert(np.all(A == A_reconstructed_rounded)  or np.all((A * -1) == A_reconstructed_rounded))
+
 
