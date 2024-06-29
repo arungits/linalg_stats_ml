@@ -30,8 +30,10 @@ A = np.array([[87,24], [2,32], [80,14], [98,74], [94,59], [37,65], [3,6], [11,56
 
 U, S, V = svd(A)
 A_reconstructed = U@S@V.transpose()
+# Due to numerical accuracy issues, round the reconstructed matrix before comparing
 A_reconstructed_rounded = np.round(A_reconstructed, 2)
-
+# Check if the reconstructed matrix is equal to original matrix or is same as original matrix with sign flipped
+# The reason for sign flipping is unknown and needs to be investigated
 assert(np.all(A == A_reconstructed_rounded)  or np.all((A * -1) == A_reconstructed_rounded))
 
 
