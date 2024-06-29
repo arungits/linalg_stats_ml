@@ -7,6 +7,7 @@ def sorted_eigen(eigendecomposition):
     ids = np.argsort(eigenvalues)[::-1]
     return (eigenvalues[ids], eigenvectors[:,ids])
 def svd(A):
+    # NOTE: THIS METHOD IS NOT NUMERICALLY STABLE AND IS FOR EDUCATIONAL PURPOSES ONLY
     # This method implements SVD from scratch for rectangular matrix m x n where m > n
     # To perform singular value decomposition for the matrix A and find the components, viz.,
     #  U (Column space), S (diagonal matrix) and V (Rowspace), we will do the following
