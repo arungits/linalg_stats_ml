@@ -4,11 +4,9 @@ import numpy.linalg as LA
 def least_squares_fit_by_projection(A, b):
     # Use the following matrix to project b onto the column space of A
     # p = A@inv(A_transpose@A)@A_transpose@b
-    # Then solve for x using the equation Ax = p using pseudoinverse of A
+    # Then solve for x using the equation Ax = b using pseudoinverse of A
     # where x is the best fit solution for Ax = b
-    A_transpose = A.transpose()
-    p = A @ LA.inv(A_transpose @ A) @ A_transpose @ b
-    x = LA.pinv(A) @ p
+    x = LA.pinv(A) @ b
     return x
 
 def least_squares_fit_by_direct_formula(A, b):
