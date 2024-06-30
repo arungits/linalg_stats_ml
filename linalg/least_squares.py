@@ -21,12 +21,17 @@ def least_squares_fit_by_direct_formula(A, b):
 
 
 # Test code
-A = np.random.randn(10,2)
-b = np.random.randn(10)
-x_projection = np.round(least_squares_fit_by_projection(A, b),4)
-x_direct = np.round(least_squares_fit_by_direct_formula(A, b), 4)
-# Ensure both methods return the same x
-assert(np.all(x_projection == x_direct))
+# Repeat for 10 trials
+for i in range(10):
+    # Generate a random 10x2 matrix A and a 10 dimensional vector b
+    A = np.random.randn(10,2)
+    b = np.random.randn(10)
+    # Find the best fit Least Squares solution using pseudoinverse as well as computing directly
+    # Compare the results to make sure both methods return the same x.
+    x_projection = np.round(least_squares_fit_by_projection(A, b),4)
+    x_direct = np.round(least_squares_fit_by_direct_formula(A, b), 4)
+    # Ensure both methods return the same x
+    assert(np.all(x_projection == x_direct))
 
 
 
