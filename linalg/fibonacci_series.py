@@ -33,7 +33,7 @@ def get_nth_fibonacci_term(n):
     l = np.array([c[0] * pow(eigenvalues[0], n-2), c[1] * pow(eigenvalues[1], n-2)])
     # Step2: take the dot product of E and the above vector to find the nth term of the Fib series
     nth_term = E@l
-    return np.round(nth_term[0],2)
+    return np.round(nth_term[0])
 
 # Test code
 
@@ -48,5 +48,6 @@ assert(get_nth_fibonacci_term(30) == 514229)
 assert (get_nth_fibonacci_term(40) == 63245986)
 assert(get_nth_fibonacci_term(50) == 7778742049)
 assert(get_nth_fibonacci_term(60) == 956722026041)
-# Beyond 60, due to numerical accuracy issues in computing eigvalues and eigvectors, this method
-# does not generate accurate results
+assert(get_nth_fibonacci_term(70) == 117669030460994)
+# Beyond 70th term, due to numerical accuracy issues in computing eigvalues and eigvectors,
+# this method does not generate accurate results
