@@ -6,34 +6,50 @@ def sorted_eigen(eigendecomposition):
     eigenvectors = eigendecomposition[1]
     ids = np.argsort(eigenvalues)[::-1]
     return (eigenvalues[ids], eigenvectors[:,ids])
+
 def svd(A):
-    # NOTE: THIS METHOD IS NOT NUMERICALLY STABLE AND IS FOR EDUCATIONAL PURPOSES ONLY
-    # This method implements SVD from scratch for rectangular matrix m x n where m > n
+    # This method implements SVD from scratch for a mxn matrix
     # To perform singular value decomposition for the matrix A and find the components, viz.,
     #  U (Column space), S (diagonal matrix) and V (Rowspace), we will do the following
     # 1. Eigen decomposition / diagonalization of the positive definite n x n matrix
     # A_transpose @ A to find its eigenvalues and eigenvectors to get V & S
-    # 2. Eigen decomposition of the positive definite m x m matrix
-    # A @ A_transpose to find its eigenvectors which is U
+    # 2. Solve A = U@sqrt(S)@V_transpose to find U
+
     m, n = A.shape
-    # Asset the matrix is retangular
-    assert (m > n)
     A_transpose = A.transpose()
-    _, V = sorted_eigen(LA.eig(A_transpose @ A))
-    eigenvalues, U = sorted_eigen(LA.eig(A @ A_transpose))
-    S = np.diag(np.sqrt(np.round(eigenvalues, 4)))
-    S = np.delete(S, range(n, m), 1)
-    return (U, S, V)
+
+    # Eigen decomposition of A_transpose@A
+    E, V = sorted_eigen(LA.eig(A_transpose @ A))
+    # Singular values of A are square roots of the eigenvalues of A_tranpose@A
+    E = np.sqrt(np.round(E, 4))
+    S = np.zeros((m, n))
+    for i in range(len(E)):
+        if np.round(E[i]) == 0:
+            continue
+        S[i,i] = E[i]
+    # Now solve for U by solving U = A@V@S_inv (As per SVD, A = U@S@V_transpose
+    S_inv = np.zeros((n, m))
+    for i in range(len(E)):
+        if np.round(E[i]) == 0:
+            continue
+        S_inv[i,i] = 1/E[i]
+    U = A@V@S_inv
+    return (U, S, V.transpose())
 
 # Test code
-A = np.array([[87,24], [2,32], [80,14], [98,74], [94,59], [37,65], [3,6], [11,56], [15,30], [26,33]])
+for i in range(100):
+    A = np.random.randn(10,2)
+    U,S,Vt = svd(A)
+    A_reconstructed = U@S@Vt
+    assert(np.all(np.round(A, 2) == np.round(A_reconstructed, 2)))
 
-U, S, V = svd(A)
-A_reconstructed = U@S@V.transpose()
-# Due to numerical accuracy issues, round the reconstructed matrix before comparing
-A_reconstructed_rounded = np.round(A_reconstructed, 2)
-# Check if the reconstructed matrix is equal to original matrix or is same as original matrix with sign flipped
-# The reason for sign flipping is unknown and needs to be investigated
-assert(np.all(A == A_reconstructed_rounded)  or np.all((A * -1) == A_reconstructed_rounded))
+for i in range(100):
+    A = np.random.randn(2, 10)
+    U,S,Vt = svd(A)
+    A_reconstructed = U@S@Vt
+    assert(np.all(np.round(A, 2) == np.round(A_reconstructed, 2)))
+
+
+
 
 
