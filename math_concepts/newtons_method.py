@@ -1,6 +1,9 @@
 def find_root(number, root):
     # Note: If root is 2, this method will return the square root of "number",
     # If root is 3, this method will return the cube root, etc.
+    # Newton's method is an iterative process using the formula:
+    # x_n+1 = x_n - f(x_n) / f'(x_n)
+    # The above process is repeated until x's converge
 
     assert(number > 0)
     assert(root >= 2)
@@ -10,7 +13,7 @@ def find_root(number, root):
     # Repeat for a maximum of 100 times and if there is no convergence, quit and raise error
     for iteration in range(100):
         new_guess = guess - (pow(guess, root) - number) / (root * pow(guess, root-1))
-        if abs(new_guess - guess) < epsilon:
+        if abs(new_guess - guess) <= epsilon:
             print(f"Found answer in {iteration} iterations")
             return new_guess
         guess = new_guess
