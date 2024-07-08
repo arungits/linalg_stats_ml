@@ -17,12 +17,15 @@ class Random:
     def random(self):
         return self.randint() / self.max_possible_n
 
+    def check_range(self, start, end):
+        _range = end - start
+        if _range > self.max_possible_n:
+            raise ValueError
+
     def randint(self, start=0, end=None):
         if end is None:
             end = self.max_possible_n
-        range = end - start
-        if range > self.max_possible_n:
-            raise ValueError
+        self.check_range(start, end)
         n = str(self.seed * self.seed)
         if len(n) < (self.digits * 2):
             n = "0" + n
@@ -33,8 +36,7 @@ class Random:
         else:
             n = 0
         self.seed = n
-        n = n % (range + 1)
-        return n + start
+        return self.offset_by_start(n, start, end)
 
     def randomchoice(self, list):
         size = len(list)
@@ -45,6 +47,8 @@ class Random:
 
     @classmethod
     def generate_seed(cls, digits):
+        # Some good 8 digit seeds that result in more even distribution - 20424812, 20424863, 20424871
+        # Examples of bad 8 digit seeds - 20424844, 20424878
         good_8_digit_seeds = [20424812, 20424863, 20424871]
         if digits == 8:
             random_index = int(time.time()) % 3
@@ -53,9 +57,36 @@ class Random:
             seed = int(time.time()) % pow(10, digits)
         return seed
 
+    @classmethod
+    def offset_by_start(cls, n, start, end):
+        n = n % ((end - start) + 1)
+        return n + start
+
+class RandomLCG(Random):
+    '''
+    This pseudo random generator implements "Linear Congruential Generator"
+    https://en.wikipedia.org/wiki/Linear_congruential_generator
+    '''
+
+    modulus = pow(2,32)
+    max_possible_n = modulus - 1
+
+    def __init__(self):
+        '''
+        This implementation uses the parameters Numerical Recipes use with LCG.
+        Refer the wikipedia page above.
+        '''
+        self.multiplier = 1664525
+        self.increment = 1013904223
+        self.seed = int(time.time())
+
+    def randint(self, start=0, end=max_possible_n):
+        self.check_range(start, end)
+        n = (self.multiplier * self.seed + self.increment) % self.modulus
+        self.seed = n
+        return self.offset_by_start(n, start, end)
+
 # Test Code
-# Some good 8 digit seeds that result in more even distribution - 20424812, 20424863, 20424871
-# Examples of bad 8 digit seeds - 20424844, 20424878
 
 def test_random(random):
     rand_counts = {}
@@ -89,11 +120,19 @@ def test_randint(random, low, high):
         count = randint_counts[key]
         assert (85000 <= count and count <= 115000)
 
-random = Random()
-# Print the seed selected
-print(random.seed)
-test_random(random)
-test_randint(random, 0, 9)
-test_randint(random, 101, 110)
+def execute_tests(random):
+    # Print the seed selected
+    print(random.seed)
+    test_random(random)
+    test_randint(random, 0, 9)
+    test_randint(random, 101, 110)
+
+execute_tests(Random())
+execute_tests(RandomLCG())
+
+
+
+
+
 
 
