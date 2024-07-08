@@ -39,7 +39,7 @@ class Random:
     def randomchoice(self, list):
         size = len(list)
         assert(size <= self.max_possible_n)
-        random_index = self.randint(0, size)
+        random_index = self.randint(0, size - 1)
         return list[random_index]
 
     @classmethod
