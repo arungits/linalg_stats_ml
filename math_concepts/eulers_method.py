@@ -52,6 +52,8 @@ initial_condition = (0,1)
 actual_solution = lambda x: pow(np.e, pow(x, 2) / 2) # For the given initial condition (0,1)
 x_to_solve_for = 5
 execute_test(dy_dx, d2y_dx2, x_to_solve_for, initial_condition, actual_solution)
+x_to_solve_for = -5
+execute_test(dy_dx, d2y_dx2, x_to_solve_for, initial_condition, actual_solution)
 
 
 
