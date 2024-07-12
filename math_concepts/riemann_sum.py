@@ -12,7 +12,7 @@ def riemann_sum(f, low, high):
     '''
     # Compute the number of pieces to divide the area between low and high
     # Higher n the more accurate the area computed will be
-    n = max(1000, abs(high - low)/0.5)
+    n = int(max(1000, abs(high - low)/0.5))
     width = (high - low) / n
     total_area = 0
     x = low
@@ -63,3 +63,8 @@ execute_test(f, actual_area, 1, 1)
 execute_test(f, actual_area, 1, 0.5)
 execute_test(f, actual_area, 1, 0.9)
 execute_test(f, actual_area, 1, 0.99)
+
+# Bell curve f = e^(-x^2) has an area of sqrt(pi) between -infinity and infinity
+f = lambda x: pow(np.e, -1*pow(x,2))
+actual_area = lambda x,y: np.sqrt(np.pi) # Parameters are not used as the area is known
+execute_test(f, actual_area, -10000, 10000) #Limits are set to a large number as we cannot compute till inifinity
