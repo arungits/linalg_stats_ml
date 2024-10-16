@@ -40,7 +40,6 @@ department_targets = keras.random.randint(shape=(num_samples,), minval=0, maxval
 # Model initialization
 model = CustomerTicketModel(num_depts)
 inputs = {"title": title_data, "description": description_data, "tags": tags_data}
-priority, department = model(inputs)
 model.compile(optimizer="rmsprop", loss=["mean_squared_error", "sparse_categorical_crossentropy"], metrics=[["mean_absolute_error"], ["accuracy"]])
 model.fit(inputs, [priority_targets, department_targets], epochs=1)
 results = model.evaluate(inputs, [priority_targets, department_targets])
