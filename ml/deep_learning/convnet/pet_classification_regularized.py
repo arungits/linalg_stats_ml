@@ -23,6 +23,8 @@ test_dataset = image_dataset_from_directory(
 )
 
 # Model initialization
+# Model with augmentation for regularization
+
 data_augmentation_layer = keras.Sequential(
     [
         layers.RandomFlip("horizontal"),
@@ -31,7 +33,19 @@ data_augmentation_layer = keras.Sequential(
     ]
 )
 
-# Model with augmentation for regularization
+# Test data augmentation layer
+
+import matplotlib.pyplot as plt
+plt.figure(figsize=(10,10))
+for images,_ in train_dataset.take(1):
+    for i in range(9):
+        augmented_images = data_augmentation_layer(images)
+        ax = plt.subplot(3,3,i+1)
+        plt.imshow(augmented_images[0].numpy().astype("uint8"))
+        plt.axis("off")
+
+plt.show()
+
 inputs = keras.Input(shape=(180,180,3))
 x = data_augmentation_layer(inputs)
 x = layers.Rescaling(1./255)(x) # Converts uint8 values to float32 values between 0 and 1
@@ -60,19 +74,18 @@ callbacks = [
         monitor="val_loss"
     )
 ]
-history = model.fit(train_dataset, epochs=30, callbacks=callbacks, validation_data=validation_dataset)
-
-import matplotlib.pyplot as plt
-accuracy = history.history["accuracy"]
-val_accuracy = history.history["val_accuracy"]
-loss = history.history["loss"]
-val_loss = history.history["val_loss"]
-epochs = range(1, len(accuracy) + 1)
-plt.plot(epochs, accuracy, "b", label="Training accuracy")
-plt.plot(epochs, val_accuracy, "g", label="Validation accuracy")
-plt.title("Training and validation accuracy")
-plt.legend()
-plt.show()
+# history = model.fit(train_dataset, epochs=30, callbacks=callbacks, validation_data=validation_dataset)
+#
+# accuracy = history.history["accuracy"]
+# val_accuracy = history.history["val_accuracy"]
+# loss = history.history["loss"]
+# val_loss = history.history["val_loss"]
+# epochs = range(1, len(accuracy) + 1)
+# plt.plot(epochs, accuracy, "b", label="Training accuracy")
+# plt.plot(epochs, val_accuracy, "g", label="Validation accuracy")
+# plt.title("Training and validation accuracy")
+# plt.legend()
+# plt.show()
 
 test_model = keras.models.load_model("pet_classification_regularized.keras")
 test_loss, test_acc = test_model.evaluate(test_dataset)
