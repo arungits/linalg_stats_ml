@@ -97,4 +97,4 @@ plt.show()
 
 test_model = keras.models.load_model("convnet_from_scratch.keras")
 test_loss, test_acc = test_model.evaluate(test_dataset)
-print(f"Test accuracy: {test_acc:.3f}")
+print(f"Test accuracy: {test_acc:.3f}") # Test accuracy is 70.6%

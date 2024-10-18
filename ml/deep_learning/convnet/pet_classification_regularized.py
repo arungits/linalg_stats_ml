@@ -74,21 +74,23 @@ callbacks = [
         monitor="val_loss"
     )
 ]
-# history = model.fit(train_dataset, epochs=30, callbacks=callbacks, validation_data=validation_dataset)
-#
-# accuracy = history.history["accuracy"]
-# val_accuracy = history.history["val_accuracy"]
-# loss = history.history["loss"]
-# val_loss = history.history["val_loss"]
-# epochs = range(1, len(accuracy) + 1)
-# plt.plot(epochs, accuracy, "b", label="Training accuracy")
-# plt.plot(epochs, val_accuracy, "g", label="Validation accuracy")
-# plt.title("Training and validation accuracy")
-# plt.legend()
-# plt.show()
+history = model.fit(train_dataset, epochs=30, callbacks=callbacks, validation_data=validation_dataset)
+
+accuracy = history.history["accuracy"]
+val_accuracy = history.history["val_accuracy"]
+loss = history.history["loss"]
+val_loss = history.history["val_loss"]
+epochs = range(1, len(accuracy) + 1)
+plt.plot(epochs, accuracy, "b", label="Training accuracy")
+plt.plot(epochs, val_accuracy, "g", label="Validation accuracy")
+plt.title("Training and validation accuracy")
+plt.legend()
+plt.show()
+
+# Test dataset evaluation
 
 test_model = keras.models.load_model("pet_classification_regularized.keras")
 test_loss, test_acc = test_model.evaluate(test_dataset)
-print(f"Test accuracy: {test_acc:.3f}")
+print(f"Test accuracy: {test_acc:.3f}") # Test accuracy is 78.1%
 
-# Testset evaluation
+
