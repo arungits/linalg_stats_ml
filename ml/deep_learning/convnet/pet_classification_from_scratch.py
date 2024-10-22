@@ -23,7 +23,6 @@ def make_subsets():
 # Uncomment the following line if you want to regenerate the subset to train, validate and test on
 # make_subsets()
 
-import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 
