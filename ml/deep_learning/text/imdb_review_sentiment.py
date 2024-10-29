@@ -15,10 +15,10 @@ def create_val_dataset():
             shutil.move(train_dir / category / fname, val_dir / category / fname)
 # create_val_dataset()
 
+# Load train, val and test datasets
+
 from tensorflow import keras
 batch_size = 32
-
-# Load train, val and test datasets
 
 train_ds = keras.utils.text_dataset_from_directory("aclImdb/train", batch_size=batch_size)
 val_ds = keras.utils.text_dataset_from_directory("aclImdb/val", batch_size=batch_size)
@@ -95,13 +95,16 @@ def train_and_evaluate(ngrams=1, output_mode="multi_hot"):
 
 # Train and evaluate Unigram model with Bag of words encoding
 
+print("### Unigram model ###")
 train_and_evaluate(1, "multi_hot")
 
 # Train and evaluate Bigram model with Bag of words encoding
 
+print("### Bigram model (multi hot) ###")
 train_and_evaluate(2, "multi_hot")
 
 # Train and evaluate Bigram model with TF-IDF (word frequency) encoding
 
+print("### Bigram model with term frequency ###")
 train_and_evaluate(2, "tf_idf")
 
