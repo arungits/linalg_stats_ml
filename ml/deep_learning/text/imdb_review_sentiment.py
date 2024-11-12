@@ -108,3 +108,4 @@ train_and_evaluate(2, "multi_hot")
 print("### Bigram model with term frequency ###")
 train_and_evaluate(2, "tf_idf")
 
+
